@@ -1,16 +1,15 @@
-import streamlit as st
-import pickle
+import steamlit as st
 import numpy as np
+import pickle
+import Covid19_Prediction_
+
 
 def load_model():
-    with open('pickel_model.pkl','rb') as file:
-          data=pickle.load(file)
-    return data
+    pickle.dump(dec_tree,open('pickel_model (1).pkl','wb'))
+    model=pickle.load(open('pickel_model (1).pkl','rb'))
+    return model
 
-data =load_model()
-
-
-regressor =data["model"]
+model =load_model()
 
 def show_predict_page():
     st.title("Covid19 infection Prediction ")
@@ -29,7 +28,7 @@ def show_predict_page():
     }
 
     diffBreath_1={
-        "yes",
+        "yes"
         "no"
     }
 
@@ -47,14 +46,17 @@ def show_predict_page():
         runnyNose=1
     else: 
         runnyNose=0
-    diffbreath1=st.selectbox("difficulty in breathing",diffBreath_1)
+    diffbreath1=st.selectbox("Running nose(Cold)",diffBreath_1)
     if diffbreath1=="Yes":
-        diffBreath=1
+        diffBreath=1 
     else: 
         diffBreath=0    
     clicked=st.button("kown the probability of infection") 
     if clicked:
         x=np.array([[fever,bodyPain,age,runnyNose,diffBreath]])
         x
-        y_pred=regressor.predict(x)
-        st.subheader(f"the probability of covid infection id {y_pred*100}")
+        y_pred = clflo.predict_proba(x)
+        y_pred
+
+    fin=y_pred[0]
+    st.subheader(f"the estimated probabity is {fin*100}")
